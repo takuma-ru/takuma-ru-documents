@@ -1,0 +1,23 @@
+{
+  "name": "takuma-ru_documents",
+  "version": "1.0.0",
+  "description": "Zenn, Qiita用ドキュメント",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takuma-ru/takuma-ru_documents.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/takuma-ru/takuma-ru_documents/issues"
+  },
+  "homepage": "https://github.com/takuma-ru/takuma-ru_documents#readme",
+  "dependencies": {
+    "zenn-cli": "^0.1.100"
+  }
+}

@@ -1,2 +1,2 @@
 # takuma-ru_documents
-Zenn, Qiita用ドキュメント
+Zenn用ドキュメント
