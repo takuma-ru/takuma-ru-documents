@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/takuma-ru/takuma-ru_documents#readme",
   "dependencies": {
-    "zenn-cli": "^0.1.100"
+    "zenn-cli": "^0.1.115"
   }
 }

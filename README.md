@@ -1,2 +1,7 @@
 # takuma-ru_documents
-Zenn用ドキュメント
+
+## Description
+Zenn記事用リポジトリ
+
+## Other
+#### [emoji一覧](https://lets-emoji.com/emojilist/)
