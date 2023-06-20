@@ -2,8 +2,8 @@
 title: "Reactアニメーションライブラリって結局何がいいの？"
 emoji: "🧪"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Animation", "React", "Framer"]
-published: false
+topics: ["Animation", "React", "Framer", "WebAnimationsAPI", "Nextjs"]
+published: true
 ---
 
 # はじめに
@@ -11,63 +11,218 @@ published: false
 Reactでアニメーションを実装するライブラリはたくさんありますが、どれを使えばいいのか迷ってしまいますよね。
 
 # 比べてやろうじゃないか...
-#### 比較するライブラリ
-- ライブラリを使用せず実装(JS+CSS)
-- Framer Motion
-- React Transition Group
-- react-spring
-
+というわけで、今回はReactでアニメーションを実装するライブラリを何点か比較し、どれがいいのかを検証してみます。
 #### 検証環境
 
+| 項目         | 数値                                                                                                   |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| 検証機       | M2 MacBook Pro                                                                                         |
+| OS           | Mac OS 13.4                                                                                            |
+| プロジェクト | Monorepo Next.js Project ([ソースコードを参照](https://github.com/takuma-ru/next-anim-lib-comparison)) |
+| ブラウザ     | Arc                                                                                                    |
+| エンジン     | Chromium Version 114.0.5735.133 (Official Build) (arm64)                                               |
+
+#### 比較するライブラリ
+**1. ライブラリを使用せず実装(JS only)**
+  ライブラリを使用しない場合は**Web Animations API**を使用することで比較的楽にアニメーションを実装することができます。今回はこれを使用します。
+https://developer.mozilla.org/ja/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API
+
+**2. Framer Motion**
+  Framer MotionはFramer社が開発しているアニメーションライブラリで、エレメントタグを拡張する形でアニメーションを実装することができます。
+https://www.framer.com/motion/
+
+**3. react-spring**
+  spring-physics（ばねの物理学）を原点とするアニメーションライブラリです。easingに関して独自の考えを持っており、直感的にeasingを実装することができる点が特徴です。
+https://www.react-spring.dev/
+
+#### 比較対象
+それぞれのライブラリで、**開閉アニメーション付きアコーディオンコンポーネント**を実装する。
+実装時の条件は以下の通り。
+- `<details>`と`<summary>` (実用的かつ実装が複雑という点で採用)
+- 開閉の切り替えはdetailsタグの`open`属性を使用（i11y対策）
+- durationは`400ms`
+- easingは `cubic-bezier(0.4, 0.0, 0.2, 1)`
+
 #### 検証項目
-- 実装量(コード数)
-- ビルドサイズ(ビルドした時のバイト数)
-- パフォーマンス(重いアニメーション実行時のFPS)
+以下の3点を結果を測定する。
+測定後、**各項目ごとの評価**と**総合的な評価**を行う。
+#### 1. 実装コスト
+行数・文字数に加え、作成する変数や関数の数も測定する。
+実装時に時間がかかった箇所や、自分で工夫した点をポイントとしてまとめる。
+#### 2. ビルドサイズ
+`yarn build`実行時のビルドサイズを測定する。
+#### 3. パフォーマンス
+LightHouseのパフォーマンススコアを測定する。
 
-#### 検証方法
+# 対象１：ライブラリを使用せず実装(JS only)
+まずはライブラリを使用せずにアニメーションを実装してみます。
 
+## 実装したコード
+https://github.com/takuma-ru/next-anim-lib-comparison/blob/49423b385e09b5e672f78e19d785aa8407bac9b4/default/src/app/_components/Accordion.tsx
 
-# 比較１：ライブラリを使用せず実装(JS+CSS)
-### 実装したコード
+## 結果
+### 1. 実装コスト
+**99行**、**2779文字**で実装することができた。
+変数は**4つ**。
+・easing等のconfig変数
+・開閉フラグのstate
+・details要素の参照を行うref
+・アコーディオンの中身要素の参照を行うref
 
-```tsx
+関数は**3つ**。
+・アコーディオンを開く関数
+・アコーディオンを閉じる関数
+・開閉どちらを実行するかを判定する関数
+
+#### 実装時のポイント
+- easingやdurationはアニメーション実行関数(`.animate()`)の引数に毎回渡する必要があるため変数化した。
+- アコーディオンを開く際アコーディオンの中身の高さを`auto`にしてしまうと正常に動作しない。そのため、useRefを用いて高さを取得する必要がある。
+
+### 2. ビルドサイズ
+`yarn build`を行った結果
+```
+Route (app)                                Size     First Load JS
+┌ ○ /                                      1.58 kB        78.9 kB
+└ ○ /favicon.ico                           0 B                0 B
++ First Load JS shared by all              77.3 kB
+  ├ chunks/62-68b3c52ca89ed77b.js          24.8 kB
+  ├ chunks/d4618404-1a4e538510290108.js    50.5 kB
+  ├ chunks/main-app-71fc4a4c36b17cc9.js    214 B
+  └ chunks/webpack-0d81cf5b3d6f867f.js     1.71 kB
 ```
 
-### 結果
-| 項目           | 数値           |
-| -------------- | -------------- |
-| 実装量         | xx行<br>xx文字 |
-| ビルドサイズ   | xxKB           |
-| パフォーマンス | xxFPS          |
 
-# 比較2：Framer Motion
+### 3. パフォーマンス
+![](https://storage.googleapis.com/zenn-user-upload/d8f2485729e7-20230620.png)
+
+# 対象2：Framer Motion
+次にFramer Motionを使用してアニメーションを実装してみます。
+
+## 実装したコード
+https://github.com/takuma-ru/next-anim-lib-comparison/blob/49423b385e09b5e672f78e19d785aa8407bac9b4/framer-motion/src/app/_components/Accordion.tsx
+## 結果
+### 1. 実装コスト
+**85**行、**2386**文字で実装することができた。
+変数は**2つ**。
+・開閉フラグのstate
+・アニメーションを操作するためのライブラリ関数から取得した変数(`controls`)
+
+関数は**3つ**。
+・アコーディオンを開く関数
+・アコーディオンを閉じる関数
+・開閉どちらを実行するかを判定する関数
+
+#### 実装時のポイント
+- Mount時, Destroy時のアニメーションは全て`<motion.div>`の属性として設定することができる。しかし今回は開閉状態を`open`属性で管理している。そのため、アコーディオンを閉じるアニメーション実行後に`open`属性を`false`にする必要がある。よって、`useAnimationControls()`を用いて、アニメーションを実行する関数を作成し、その関数を実行することでアニメーション実行後に`open`属性を`false`にすることができるようにした。
 
 
-# 比較3：React Transition Group
+### 2. ビルドサイズ
+`yarn build`を行った結果
+```
+Route (app)                                Size     First Load JS
+┌ ○ /                                      35.2 kB         112 kB
+└ ○ /favicon.ico                           0 B                0 B
++ First Load JS shared by all              77.3 kB
+  ├ chunks/62-027e33f9bf1dc1e8.js          24.8 kB
+  ├ chunks/d4618404-46b7da6a3feab3af.js    50.5 kB
+  ├ chunks/main-app-f86c3309ceff16b4.js    211 B
+  └ chunks/webpack-0d81cf5b3d6f867f.js     1.71 kB
+```
 
+### 3. パフォーマンス
+![](https://storage.googleapis.com/zenn-user-upload/f03e11aa080a-20230620.png)
 
-# 比較4：react-spring
+# 対象3：react-spring
+次にreact-springを使用してアニメーションを実装してみます。
 
+## 実装したコード
+https://github.com/takuma-ru/next-anim-lib-comparison/blob/49423b385e09b5e672f78e19d785aa8407bac9b4/react-spring/src/app/_components/Accordion.tsx
 
-# 結果
-#### 実装量
-なになにがxx文字で一番実装量が少なかった。
-逆になになにがxxで一番実装量が多かった。
-これらの実装量の差はxx文字だった。
+## 結果
+### 1. 実装コスト
+**83**行、**2474**文字で実装することができた。
+変数は**4つ**。
+・開閉フラグのstate
+・アコーディオンの中身要素の参照を行うref
+・アニメーション用のstyleを保存するライブラリ関数から取得した変数(`springs`)
+・アニメーションの制御を行うライブラリ変数から取得した変数(`api`)
 
-| ライブラリ名                     | 数値           |
-| -------------------------------- | -------------- |
-| ライブラリを使用せず実装(JS+CSS) | xx行<br>xx文字 |
-| Framer Motion                    | xx行<br>xx文字 |
-| パフォーマンス                   | xx行<br>xx文字 |
+関数は**3つ**。
+・アコーディオンを開く関数
+・アコーディオンを閉じる関数
+・開閉どちらを実行するかを判定する関数
 
-同じことする
+#### 実装時のポイント
+- react-springではeasingに独自の考えを持っており、通常の`cubic-bezier`ベースでの実装ができない（できなかった）。そのため、**`bezier-easing`というライブラリを使用**し、react-springで使用できる形に変換している。
+- 今回、開閉状態は`open`属性で管理している。そのため、アコーディオンを閉じるアニメーション実行後に`open`属性を`false`にする必要がある。だが、アニメーション実行関数に完了時を示すコールバック関数を渡すことができないため、`useSpring`で変数を生成する際に`onRest`というプロパティにコールバック関数を渡すことで対応している。
+- アコーディオンを開く際アコーディオンの中身の高さを`auto`にしてしまうと正常に動作しない。そのため、useRefを用いて高さを取得する必要がある。
+
+### 2. ビルドサイズ
+`yarn build`を行った結果
+```
+Route (app)                                Size     First Load JS
+┌ ○ /                                      17.8 kB        95.1 kB
+└ ○ /favicon.ico                           0 B                0 B
++ First Load JS shared by all              77.3 kB
+  ├ chunks/488-9bf80f03c6cec63c.js         24.9 kB
+  ├ chunks/bce60fc1-e6ab7d63ba93d2f1.js    50.5 kB
+  ├ chunks/main-app-c66ee119425b6c99.js    218 B
+  └ chunks/webpack-0d81cf5b3d6f867f.js     1.71 kB
+```
+
+### 3. パフォーマンス
+![](https://storage.googleapis.com/zenn-user-upload/7c37b54ceafd-20230620.png)
 
 # 考察
-結果を総合的かつ多面的に評価
-- 素早く実装することに重きを置くならこれ
-- パフォーマンス重視ならこれ
-- 保守面ではこれ
-- バランスがいいのはこれ
+## 実装に関して
+実装量は**Framer Motion**が一番少なかった。
+また、実装のしやすさに関しても**Framer Motion**が一番良かった。
+理由としてはアコーディオンの中身の高さを`auto`に設定しても正常に動作したことや、アニメーションに関するロジックがあまり分散せず、何ヶ所かにまとまっていたことが挙げられる。
+
+よって、実装量や実装のしやすさを考慮するのであれば**Framer Motion**が一番良いと考えられる。
+
+## ビルドサイズに関して
+ビルドサイズは**ライブラリを使用しないで実装**した場合が一番小さかった。
+ライブラリを使用すると、ライブラリのコードが含まれるため、ビルドサイズが大きくため、こうなることは必然だろう。
+
+よって、ビルドサイズを考慮するのであれば、**ライブラリを使用しないで実装**した方が良いと考えられる。
+
+## パフォーマンスに関して
+パフォーマンスに関しては、今回の規模の調査では差が出なかった。
+そのため、小規模であればどのライブラリを使用しても問題ないと考えられる。
+
+しかし、アプリの規模が大きくなった場合は、パフォーマンスに関しても差が出てくると考えられる。
+各コンポーネントでライブラリの関数をインポートしてきたり、内部で様々な処理を行うためだ。
+
+そのため、パフォーマンスを考慮した場合どれがいいかはわからなかった。
+
+## 総合的にどれが一番良かったか
+総合的に考えた場合だと、小規模のアプリの場合は**Framer Motion**が一番良いと考えられる。
+理由としては、実装量や実装のしやすさが良かったことが一番大きい。ビルドサイズは他の比べて大きかったが、何倍も差があるというわけでもなかった。サーバーの容量を数KB単位で減らしたい場合を除けばそこまで気にするほどでもないかもしれない。
+ただ、コンポーネント数が増えた場合はビルドサイズにも大きく影響を与える可能性があるため、ここは注意が必要である。
+ビルドサイズが増えてたとしても、実装コストが抑えられる場合であれば、ビルドサイズを犠牲にするのも個人的にはありだと考えられる。
+
+# さいごに
+今回はアニメーション付きのアコーディオンコンポーネントの実装を通して、各ライブラリの実装のしやすさやビルドサイズ、パフォーマンスに関して調査を行ってみました。
+結果として、実装コストで言えば**Framer Motion**が一番コード数が少なく、実装側で考えなければいけない箇所が少なかったため、良いという結論に至りましたが、ビルドサイズやパフォーマンスも含めた場合、どれが良いかは結論を出すことができませんでした。
+
+規模が大きくなると、ビルドサイズやパフォーマンスにも大きく影響を与えると考えられるため、次回調査する機会があれば複数のコンポーネントや複雑なアニメーションを実装して調査を行ってみようと思います！
+
+また、今回は3つを比較しましたが、他にもアニメーションライブラリはたくさんあります。
+**「これはオススメ！」** というライブラリがあれば、ぜひコメントで教えてくれると嬉しいです！
+
 
 #### 参考文献
+- https://developer.mozilla.org/ja/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API
+- https://www.framer.com/motion/
+- https://www.react-spring.dev/
+- https://and-engineer.com/articles/YcpgYBAAACIAupaf
+
+#### 検証に使用したコード
+https://github.com/takuma-ru/next-anim-lib-comparison
+
+#### 作者
+Vue.js好きのフロントエンドエンジニアです。
+ライブラリとか作ってるのでぜひ使ってみてください。
+https://github.com/takuma-ru
+https://github.com/takuma-ru/vue-swipe-modal
