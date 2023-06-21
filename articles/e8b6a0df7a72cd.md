@@ -166,7 +166,7 @@ Route (app)                                Size     First Load JS
 
 
 
-# 対象3：react-spring
+# 解説3：react-spring
 次にreact-springを使用してアニメーションを実装してみます。
 
 ## 実装したコード
