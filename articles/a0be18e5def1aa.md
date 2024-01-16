@@ -5,13 +5,13 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["webcomponents", "lit"]
 published: false
 ---
-## はじめに
+## 🎉 はじめに
 なんか昔から聞いたことあるけど、オワコンとか言われてるらしいけど、あんまりみんな使ってないけど、、、
 そんなWebComponentsについて、今更ながら調べてみました。
 調べてみると、とても便利で使いやすい技術だったので、今回はWebComponentsについてまとめてみました。
 （筆者はぴちぴちの20代です）
 
-## ❓ WebComponentsとは
+## 🤔 WebComponentsとは
 
 ### かんたんに
 **オリジナルのエレメントを作れちゃう**技術です。
@@ -82,14 +82,33 @@ Model : Vue
 先ほども説明しましたが、コンポーネントのDOMから完全に切り離す（カプセル化）ことができます。
 
 ![文書、シャドウルート、シャドウホストの相互作用を示す図の SVG 版。](https://developer.mozilla.org/ja/docs/Web/API/Web_components/Using_shadow_DOM/shadowdom.svg)
+図の通り、Shadow DOM は 通常のDOM（以後Light DOM）とは分離された状態で生成されます。
+これは、CSSにも適用されるため、Shadow DOM 内で Light DOM で使われている同じクラス名を使用しても、スタイルが衝突することはありません。
+
+### 4. SSRに対応した
 
 
 ## 👎 WebComponentsのだめぞ
 ### 1. 機能がブラウザに依存
+メリットで書いた通り、フレームワークに依存しないのはメリットです。
+ですが、その分ブラウザに依存するので、IE11などの古いブラウザでは動作しません。
+また、ブラウザによっては、WebComponentsの一部機能が実装されていない場合もあります。
+
+具体的に...
+- IE11 : 未サポート
+- Safari : is属性 動作不可
+- Firefox : [Declarative Shadow DOM](https://developer.chrome.com/docs/css-ui/declarative-shadow-dom?hl=ja) 未対応（[現在対応作業中だそうです](https://github.com/mozilla/standards-positions/issues/335)）
+
+詳しくは[Can I use](https://caniuse.com/?search=webcomponents)を参照してください。
+https://caniuse.com/?search=webcomponents
 
 ### 2. ドキュメントが少ない
+WebComponentsはまだまだ普及していないため、ドキュメントが少ないです。
+の割に、かなり前から存在しているので古いドキュメントが出てくることもあり、情報の精査が必要です。
 
 ### 3. 扱える人が少ない
+VueやReactのように、主流なフレームワークと比べると、扱える人が少ない印象があります。
+ですが、WebComponents独自の機能は少ないので、VueやReactを扱える人であれば、すぐに扱えるようになると思います。
 
 ## 👶 使ってみよう（基礎編）
 素のWebComponents記法を使って簡単なボタンを実装してみよう。
@@ -98,18 +117,25 @@ Model : Vue
 SSRに対応したWebComponentsを実装してみよう。
 
 ## 🧑 使ってみよう(本格編)
-実際に案件に導入する際は、WebComponentsライブラリを使用することで、型安全性や開発効率を保ったまま開発が行えます。
+実際に案件に導入する際は、WebComponentsライブラリを使用することで、より良い開発体験を得ることができます。
 本当はここで紹介したかったのですが、あくまで今回はWebComponentsの紹介記事なので、別記事として公開予定です。
 
 ちなみに...
 **[Lit](https://lit.dev/)**
-というライブラリを用いてWebページの開発を行うことができます。*（コンポーネントのみLitで開発を行って、ロジックはReactやVueで行うことも可能です！）*
+というライブラリを用いてWebページ・Webコンポーネントの開発を行うことができます。
+デフォルトで**TypeScript対応**、**Shadow DOMで自動生成**されるため、型安全性や開発効率を保ったまま開発が行えます。
+コンポーネント単位でビルドすることもできるので、VueやReactへの併用も簡単に行うことができます。
 
 Google が公開している [Material Web](https://material-web.dev/components/button/) というUIライブラリ や [Microsoftのアプリストア](https://apps.microsoft.com/home?hl=ja-jp&gl=JP)もLitを使用して開発されています。
 
 ただ記法が独特なので、大規模案件では導入コストがかかるかもしれません...
 
 ## まとめ
+
+# 筆者
+Vue.js好きのフロントエンドエンジニアです。
+ライブラリとか作ってるのでぜひ使ってみてください。
+https://github.com/takuma-ru
 
 ## 参考文献/出典
 *1 : [ウェブコンポーネント - mdn web docs](https://arc.net/l/quote/ajgmtcut)
