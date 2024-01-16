@@ -5,18 +5,18 @@
 Zenn 記事用リポジトリ
 https://zenn.dev/zenn/articles/zenn-cli-guide
 
-## Get strated
+## Get Started
 
 1. 記事作成
 
 ```bash
-npx zenn new:article
+yarn zenn new:article
 ```
 
 2. プレビュー
 
 ```bash
-npx zenn preview
+yarn zenn preview
 ```
 
 ## Other
