@@ -22,11 +22,11 @@ VueやReactでいうところのコンポーネントのようなものですね
 使い方はVueやReactのコンポーネントと似ていますが、コンポーネントの作り方は少し特殊です。
 WebComponentsは以下の3つの技術を組み合わせて構成されています。
 - **カスタム要素**
-  カスタム要素とその動作を定義するための、一連の JavaScript API です。以降、ユーザーインターフェイスの中で好きなだけ使用することができます。(*1)
+  カスタム要素とその動作を定義するための、一連の JavaScript API です。以降、ユーザーインターフェイスの中で好きなだけ使用することができます。[^1]
   **これがいわゆるコンポーネントを作ることができる機能です**。`<custom-element>`のようなオリジナルを要素を作成することができます。
 
 - **シャドウ DOM**
-  カプセル化された「シャドウ」 DOM ツリーを要素に紐付け、関連する機能を制御するための、一連の JavaScript API です。シャドウ DOM ツリーは、メイン文書の DOM とは別にレンダリングされます。こうして、要素の機能を公開せずに済み、文書の他の部分との重複を恐れることなく、スクリプト化やスタイル化できます。(*1)
+  カプセル化された「シャドウ」 DOM ツリーを要素に紐付け、関連する機能を制御するための、一連の JavaScript API です。シャドウ DOM ツリーは、メイン文書の DOM とは別にレンダリングされます。こうして、要素の機能を公開せずに済み、文書の他の部分との重複を恐れることなく、スクリプト化やスタイル化できます。[^1]
   **これがいわゆるコンポーネントのDOMから完全に切り離す（カプセル化）する機能です**。`<custom-element>`の中で定義したスタイルは、`<custom-element>`の中でのみ有効になる程度の解釈でとりあえずはOKです。
   **この技術、ヤバヤバです！！！ReactやVueの scoped css, module css と同じような機能を標準でかつ、完全にDOMから分離することができます！**
 
@@ -241,6 +241,63 @@ shadowRootにテンプレートから取得した要素を追加します。
   <custom-button>削除する</custom-button>
 </body>
 ```
+![](https://storage.googleapis.com/zenn-user-upload/4cdcca355137-20240117.png)
+
+::::details コード全体
+```html:index.html
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>WebComponentsはいいぞ - 基礎編(解答)</title>
+  </head>
+
+  <body>
+    <h1>WebComponentsはいいぞ - 基礎編</h1>
+    <p>// ここにzennの投稿ボタンを作りましょう</p>
+    <custom-button>投稿する</custom-button>
+    <p>// ここにzennの投稿削除ボタンを作りましょう</p>
+    <custom-button>削除する</custom-button>
+  </body>
+
+  <template id="custom-button-template">
+    <button onclick="alert('clicked!')" class="custom-button">
+      <slot></slot>
+    </button>
+    <style>
+      .custom-button {
+        border: none;
+        border-radius: 99px;
+        padding: 0.5rem 1rem;
+        font-size: 14px;
+        background-color: #3ea8ff;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+      }
+    </style>
+  </template>
+
+  <script>
+    customElements.define(
+      "custom-button",
+      class extends HTMLElement {
+        constructor() {
+          super();
+          let template = document.getElementById("custom-button-template");
+          let templateContent = template.content;
+
+          const shadowRoot = this.attachShadow({ mode: "open" });
+          shadowRoot.appendChild(templateContent.cloneNode(true));
+        }
+      }
+    );
+  </script>
+</html>
+```
+::::
 
 ## 🧑 使ってみよう(本格編)
 実際に案件に導入する際は、WebComponentsライブラリを使用することで、より良い開発体験を得ることができます。
@@ -257,11 +314,16 @@ Google が公開している [Material Web](https://material-web.dev/components/
 ただ記法が独特なので、大規模案件では導入コストがかかるかもしれません...
 
 ## まとめ
+今回はWebComponentsの基礎について紹介しました。
+WebComponentsはまだまだ普及していない技術ですが、機能してはとても強力で便利で使いやすい技術です。
+GoogleやMicrosoftなどの大企業が採用していることもあり、今後の普及にも期待です！
+
+ぜひ、みなさんもWebアプリを作る際はWebComponentsを選択肢の一つに入れてみてください！
 
 # 筆者
 Vue.js好きのフロントエンドエンジニアです。
-ライブラリとか作ってるのでぜひ使ってみてください。
+ライブラリとか作ってるのでぜひ。
 https://github.com/takuma-ru
 
-## 参考文献/出典
-*1 : [ウェブコンポーネント - mdn web docs](https://arc.net/l/quote/ajgmtcut)
+
+[^1]: [ウェブコンポーネント - mdn web docs](https://arc.net/l/quote/ajgmtcut)
