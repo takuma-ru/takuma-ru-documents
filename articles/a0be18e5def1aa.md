@@ -14,7 +14,7 @@ published: false
 ## 🤔 WebComponentsとは
 
 ### かんたんに
-**オリジナルのエレメントを作れちゃう**技術です。
+**カスタムエレメントを作れちゃう**技術です。
 VueやReactでいうところのコンポーネントのようなものですね。
 というか、JavaScriptライブラリのコンポーネント機能をブラウザの標準機能として実装したものです。
 
@@ -48,7 +48,7 @@ WebComponentsは以下の3つの技術を組み合わせて構成されていま
       </script>
     ```
   - `<slot>`：テンプレート内において、外部から要素を挿入するための要素です。
-    Vueの`<slot>`、Reactの`props.children`と同じような機能です。
+    [Vueのslot](https://ja.vuejs.org/guide/components/slots)や[ReactのChildren](https://ja.react.dev/reference/react/Children#alternatives)と同じような機能です。
     ```html:<custom-button>コンポーネント
       <button>
         <slot></slot>
@@ -111,10 +111,136 @@ VueやReactのように、主流なフレームワークと比べると、扱え
 ですが、WebComponents独自の機能は少ないので、VueやReactを扱える人であれば、すぐに扱えるようになると思います。
 
 ## 👶 使ってみよう（基礎編）
-素のWebComponents記法を使って簡単なボタンを実装してみよう。
+素のWebComponents記法を使って「zennの右上にある投稿ボタン」を実装してみましょう！
 
-## 🧒 使ってみよう（応用編）
-SSRに対応したWebComponentsを実装してみよう。
+### 目標
+- カスタムエレメント名 : `<custom-button>`
+- 見た目 : zennの右上にある投稿ボタンチックなやつ
+- 機能 : クリックするとアラートが表示される
+- その他 : ボタンの中身はカスタムエレメントタグで囲ったものが表示されるようにする
+
+### 1. プロジェクト作成
+  CodeSnadboxで解説します。
+  次のプロジェクトを Fork してください。
+  `index.hml`にコードを書いていきます。（完成版は`index.answer.html`）
+  @[codesandbox](https://codesandbox.io/embed/lk4v2d)
+
+### 2. カスタムエレメントのテンプレート作成
+`<template>`を使用して、カスタムエレメントのテンプレートを作成します。
+```diff html:index.html
+  <!-- head とか body は割愛 -->
+
++  <template id="custom-button-template">
++    <button onclick="alert('clicked!')">
++      <slot></slot>
++    </button>
++  </template>
+```
+`<template></template>`で囲った要素は、DOMに描画されません。ですが、JavaScriptから参照、描画させることが可能です。
+`<slot></slot>`と書いた場所に、外部から挿入された要素を表示させることができます。
+
+### 3. カスタムエレメントのスタイル作成
+カスタムエレメントにスタイルを適用する方法は2つあります。
+- `<template>`内で`<style>`を使用する
+- `<template>`内で`<link>`でcssファイルを読み込む
+
+今回は「`<template>`内で`<style>`を使用する」でいきます。
+```diff html:index.html
+  <!-- head とか body は割愛 -->
+
+  <template id="custom-button-template">
++   <button onclick="alert('clicked!')" class="custom-button">
+      <slot></slot>
+    </button>
++    <style>
++      .custom-button {
++       border: none;
++       border-radius: 99px;
++       padding: 0.5rem 1rem;
++       font-size: 14px;
++       background-color: #3ea8ff;
++       color: white;
++       cursor: pointer;
++       font-weight: 600;
++     }
++   </style>
+  </template>
+```
+template内にstyleを記述して、カスタムエレメントにスタイルを適用します。
+やっていることは普通にスタイルを時と一緒です。
+
+### 4. テンプレートをカスタムエレメントとして使えるようにする
+
+```diff html:index.html
+  <!-- head とか body は割愛 -->
+
+  <template id="custom-button-template">
+    <button onclick="alert('clicked!')" class="custom-button">
+      <slot></slot>
+    </button>
+    <style>
+    .custom-button {
+      border: none;
+      border-radius: 99px;
+      padding: 0.5rem 1rem;
+      font-size: 14px;
+      background-color: #3ea8ff;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+   }
+  </style>
+  </template>
++  <script>
++   customElements.define(
++     "custom-button",
++     class extends HTMLElement {
++       constructor() {
++         super();
++         let template = document.getElementById("custom-button-template");
++         let templateContent = template.content;
++
++         const shadowRoot = this.attachShadow({ mode: "open" });
++         shadowRoot.appendChild(templateContent.cloneNode(true));
++       }
++     }
++   );
++ </script>
+```
+[`customElements.define()`](https://developer.mozilla.org/ja/docs/Web/API/CustomElementRegistry/define)という関数を使って、カスタムエレメントを作成できます。
+第一引数にはカスタムエレメント名、第二引数にはカスタムエレメントのコンストラクタを渡します。
+
+```js
+let template = document.getElementById("custom-button-template");
+let templateContent = template.content;
+```
+idからエレメントを取得します。`template.content`でテンプレートの中の要素を取得します。
+
+```js
+const shadowRoot = this.attachShadow({ mode: "open" });
+```
+shadowRootを作成し、LightDOMから分離したツリーを作ります。
+`{ mode: "open" }`を指定することで、shadowRoot外部からshadowRootにアクセスできるようになります。
+
+```js
+shadowRoot.appendChild(templateContent.cloneNode(true));
+```
+shadowRootにテンプレートから取得した要素を追加します。
+
+
+### 5. 完成！
+これでカスタムエレメントが作成できました！
+`<body>`内で`<custom-button>`と書くことで、<template>内の要素が描画されると思います！
+
+```html:index.html
+<body>
+  <h1>WebComponentsはいいぞ - 基礎編</h1>
+  <p>// ここにzennの投稿ボタンを作りましょう</p>
+  <custom-button>投稿する</custom-button>
+  <p>// ここにzennの投稿削除ボタンを作りましょう</p>
+  <custom-button>削除する</custom-button>
+</body>
+```
 
 ## 🧑 使ってみよう(本格編)
 実際に案件に導入する際は、WebComponentsライブラリを使用することで、より良い開発体験を得ることができます。
