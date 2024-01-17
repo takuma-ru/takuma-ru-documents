@@ -67,7 +67,7 @@ WebComponentsは以下の3つの技術を組み合わせて構成されていま
 そのため、フレームワーク依存の機能やバージョンアップによるサポート終了のリスクを回避することができます。
 
 ### 2. コンポーネントの再利用性がより高まる
-View と Model を分離することができるので、コンポーネントの再利用性がより高まるよってことです。
+**View と Model を分離することができる**ので、コンポーネントの再利用性がより高まるよってことです。
 
 となると、VueやReactと併用することが可能です。
 例えば...
@@ -79,14 +79,19 @@ Model : Vue
 また、フレームワークに破壊的な（Vue2 -> Vue3みたいな）変更が発生した際でも、UI部分は修正する必要はなくなるので、他フレームワークへの移行コストを下げることができます。
 
 ### 3. ShadowDOM とかいうやばいやつを使って開発できる
-先ほども説明しましたが、コンポーネントのDOMから完全に切り離す（カプセル化）ことができます。
+先ほども説明しましたが、**コンポーネントのDOMから完全に切り離す（カプセル化）**ことができます。
 
 ![文書、シャドウルート、シャドウホストの相互作用を示す図の SVG 版。](https://developer.mozilla.org/ja/docs/Web/API/Web_components/Using_shadow_DOM/shadowdom.svg)
 図の通り、Shadow DOM は 通常のDOM（以後Light DOM）とは分離された状態で生成されます。
-これは、CSSにも適用されるため、Shadow DOM 内で Light DOM で使われている同じクラス名を使用しても、スタイルが衝突することはありません。
+これは、CSSにも適用されるため、**Shadow DOM 内で Light DOM で使われている同じクラス名を使用しても、スタイルが衝突することはありません。**
 
 ### 4. SSRに対応した
+先ほどのShadow DOMは今までJavaScriptを実行しないと生成できませんでした...
+ですが、[Declarative Shadow DOM](https://developer.chrome.com/docs/css-ui/declarative-shadow-dom?hl=ja)という仕様が追加され、**Shadow DOMを宣言的に記述することができるようになりました**。
+これによりSSRの段階でHTML内にShadow DOMも出力されるので、チラつくことなく表示できます！
 
+詳しくは
+https://qiita.com/tronicboy/items/68f2d9ae1c93a9c3f2cb
 
 ## 👎 WebComponentsのだめぞ
 ### 1. 機能がブラウザに依存
