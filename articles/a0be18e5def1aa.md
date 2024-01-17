@@ -310,8 +310,11 @@ shadowRootにテンプレートから取得した要素を追加します。
 コンポーネント単位でビルドすることもできるので、VueやReactへの併用も簡単に行うことができます。
 
 Google が公開している [Material Web](https://material-web.dev/components/button/) というUIライブラリ や [Microsoftのアプリストア](https://apps.microsoft.com/home?hl=ja-jp&gl=JP)もLitを使用して開発されています。
-
 ただ記法が独特なので、大規模案件では導入コストがかかるかもしれません...
+
+<br>
+（私も趣味がてら、ReactやVueでも利用できるLitでWebComponentsを開発しています...）
+https://github.com/vumdoc/vumdoc
 
 ## まとめ
 今回はWebComponentsの基礎について紹介しました。
