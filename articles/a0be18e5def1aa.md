@@ -2,7 +2,7 @@
 title: "Webおじさん「WebComponentsはいいぞ」"
 emoji: "👍"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["webcomponents", "lit"]
+topics: ["webcomponents", "lit", "html", "css", "javascript"]
 published: false
 ---
 ## 🎉 はじめに
