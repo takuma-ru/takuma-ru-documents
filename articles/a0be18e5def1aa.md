@@ -3,7 +3,7 @@ title: "Webおじさん「WebComponentsはいいぞ」"
 emoji: "👍"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["webcomponents", "lit", "html", "css", "javascript"]
-published: false
+published: true
 ---
 ## 🎉 はじめに
 なんか昔から聞いたことあるけど、オワコンとか言われてるらしいけど、あんまりみんな使ってないけど、、、

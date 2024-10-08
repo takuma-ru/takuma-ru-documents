@@ -1,0 +1,24 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      zenn-cli:
+        specifier: ^0.1.143
+        version: 0.1.157
+
+packages:
+
+  zenn-cli@0.1.157:
+    resolution: {integrity: sha512-df1JPOwdf3r9dH3YvgiAzfPZllzSB140uXB3EaDtVvxGaDQ2pMsrqaHkhFM6TIAk5KkVX4afN3K4RUwL+S1gKw==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+
+snapshots:
+
+  zenn-cli@0.1.157: {}
