@@ -4,7 +4,8 @@
   "description": "Zenn, Qiita用ドキュメント",
   "main": "index.js",
   "scripts": {
-    "dev": "zenn preview"
+    "dev": "zenn preview",
+    "new": "zenn new:article"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,9 @@
   "homepage": "https://github.com/takuma-ru/takuma-ru_documents#readme",
   "dependencies": {
     "zenn-cli": "^0.1.143"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
   },
   "volta": {
     "node": "18.16.0",

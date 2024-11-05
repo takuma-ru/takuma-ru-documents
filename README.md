@@ -10,13 +10,13 @@ https://zenn.dev/zenn/articles/zenn-cli-guide
 1. 記事作成
 
 ```bash
-yarn zenn new:article
+pnpm new
 ```
 
 2. プレビュー
 
 ```bash
-yarn zenn preview
+pnpm dev
 ```
 
 ## Other
