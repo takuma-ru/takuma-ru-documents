@@ -1,28 +1,19 @@
 {
-  "name": "takuma-ru_documents",
+  "name": "takuma-ru-documents",
   "version": "1.0.0",
-  "description": "Zenn, Qiita用ドキュメント",
-  "main": "index.js",
+  "description": "Zenn, Qiita, Slidev用ドキュメント",
   "scripts": {
     "dev": "zenn preview",
-    "new": "zenn new:article"
+    "new": "zenn new:article",
+    "lint": "eslint ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/takuma-ru/takuma-ru_documents.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/takuma-ru/takuma-ru_documents/issues"
-  },
-  "homepage": "https://github.com/takuma-ru/takuma-ru_documents#readme",
   "dependencies": {
     "zenn-cli": "^0.1.143"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4"
+    "@antfu/eslint-config": "^3.9.1",
+    "eslint": "^9.15.0",
+    "eslint-plugin-format": "^0.1.2"
   },
   "volta": {
     "node": "18.16.0",
