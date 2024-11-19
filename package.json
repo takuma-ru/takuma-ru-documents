@@ -3,12 +3,20 @@
   "version": "1.0.0",
   "description": "Zenn, Qiita, Slidev用ドキュメント",
   "scripts": {
-    "dev": "zenn preview",
-    "new": "zenn new:article",
+    "z:dev": "zenn preview",
+    "z:new": "zenn new:article",
+    "s:build": "slidev build *.md --base /slidev/ --out slidev/dist",
+    "s:dev": "slidev slidev/slides.md",
+    "s:export": "slidev export",
     "lint": "eslint ."
   },
   "dependencies": {
-    "zenn-cli": "^0.1.143"
+    "@slidev/cli": "^0.50.0-beta.6",
+    "@slidev/theme-apple-basic": "^0.25.1",
+    "@slidev/theme-default": "latest",
+    "@slidev/theme-seriph": "latest",
+    "vue": "^3.5.12",
+    "zenn-cli": "^0.1.158"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.9.1",
