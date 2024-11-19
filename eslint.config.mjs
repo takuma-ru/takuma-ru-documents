@@ -14,7 +14,7 @@ export default antfu({
   formatters: {
     html: true,
     css: true,
-    markdown: true,
+    markdown: false,
   },
   ignores: ["**/dist/**/*"],
 });
