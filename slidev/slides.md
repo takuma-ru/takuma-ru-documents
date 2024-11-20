@@ -1,11 +1,17 @@
 ---
 theme: default
-layout: intro
-title: 【Slidev 入門】エンジニアだからこそ作れるつよつよスライドの作り方！
+title: 【Slidev 超入門】エンジニアだからこそ作れるつよつよスライドの作り方！
 mdc: true
+fonts:
+  # 標準テキスト用
+  sans: Noto Sans JP
+  # UnoCSS で `font-serif` クラスを指定したとき用
+  serif: Noto Serif JP
+  # コードブロック用
+  mono: Fira Code
 ---
 
-## Slidev 入門
+## Slidev 超入門
 
 # エンジニアだからこそ作れるつよつよスライドの作り方！
 
@@ -14,9 +20,31 @@ mdc: true
 </div>
 
 ---
-layout: center
+layout: section
 ---
-## markdown Syntax
+
+## Slidevとは？
+
+---
+
+**Slidev** は **Markdown** ベースで構築できるプレゼンテーションライブラリです。
+数々のOSSに携わってきている **Anthony Fu** さん([antfu.me](https://antfu.me/))が開発したライブラリで、 **Vue.js** をベースに構築されています。
+
+### 2.1. Slidev の特徴
+
+- **Markdownで記述**
+- **開発者フレンドリー**
+- **Vue.js, CSS でインタラクティブで表現力豊かなカスタマイズが可能**
+- **多様な公開方法**
+- **Vite で高速なビルド**
+
+詳細は[Slidev - Slidevを選ぶ理由](https://sli.dev/guide/why#why-slidev)
+
+---
+layout: section
+---
+
+## Default Markdown Syntax
 
 ---
 
@@ -100,3 +128,46 @@ Some text to show that the reference links can follow later.
 [arbitrary case-insensitive reference text]: https://www.mozilla.org
 [1]: http://slashdot.org
 [link text itself]: http://www.reddit.com
+
+---
+layout: section
+---
+
+## Animation
+
+---
+layout: MyLayout
+---
+
+### v-click
+
+<v-click>
+   <p>この要素は 1回 Right Arrow や Space キーを押すことで表示されました</p>
+</v-click>
+
+<div v-click>
+  <p>この要素は 2回 Right Arrow や Space キーを押すことで表示されました</p>
+</div>
+
+---
+
+<div class="absolute bottom-5 left-10">
+  <span class="font-size-2">
+    {{ $slidev.configs.title }}
+  </span>
+</div>
+
+<div class="grid pt-4 gap-4 grid-cols-[100px,1fr]">
+
+### Name
+
+- Item 1
+- Item 2
+
+</div>
+
+<div class="absolute bottom-5 right-5">
+  <span class="font-size-2">
+    {{ $page }}
+  </span>
+</div>
