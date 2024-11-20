@@ -15,6 +15,7 @@
     "@slidev/theme-apple-basic": "^0.25.1",
     "@slidev/theme-default": "latest",
     "@slidev/theme-seriph": "latest",
+    "slidev-theme-geist": "^0.8.1",
     "vue": "^3.5.12",
     "zenn-cli": "^0.1.158"
   },
